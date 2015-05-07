@@ -298,4 +298,34 @@ class Api {
 		}
 		return json_encode($result, JSON_UNESCAPED_UNICODE);
 	}
+
+	/**
+	 * 根据专辑ID取得专辑歌曲详细信息
+	 * @param  int $albumId 专辑ID
+	 * @return Json       详细信息
+	 */
+	public function get_album_songs($albumId) {
+		$result = null;
+		$url = "http://music.163.com/api/album/$albumId/";
+		$jsonArr = self::request($url);
+		if ($jsonArr['code'] === 200) {
+			$result['status'] = 'success';
+			$songsList = $jsonArr['album']['songs'];
+			$result['info'] = array();
+			for ($i = 0; $i < count($songsList); $i++) {
+				$song = array(
+					'songId' => $songsList[$i]['id'],
+					'songName' => $songsList[$i]['name'],
+					'albumName' => $songsList[$i]['album']['name'],
+					'albumName' => $songsList[$i]['album']['id'],
+					'artistsId' => $songsList[$i]['artists'][0]['id'],
+					'artistsName' => $songsList[$i]['artists'][0]['name'],
+					'mp3Url' => self::get_hd_mp3_url(number_format($songsList[$i]['hMusic']['dfsId'], 0, '', '')));
+				array_push($result['info'], $song);
+			}
+		} else {
+			$result['status'] = 'false';
+		}
+		return json_encode($result, JSON_UNESCAPED_UNICODE);
+	}
 }
