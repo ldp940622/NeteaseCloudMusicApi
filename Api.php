@@ -132,21 +132,15 @@ class Api {
 		$url = 'http://music.163.com/api/playlist/detail?id=' . $playlistId;
 		$result = null;
 		$jsonArr = self::request($url);
-		$playlist = $jsonArr['result']['tracks'];
+		$songsList = $jsonArr['result']['tracks'];
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
 			$result['info'] = array();
-			for ($i = 0; $i < count($playlist); $i++) {
-				$arrayName = array(
-					'songId' => $playlist[$i]['id'],
-					'songName' => $playlist[$i]['name'],
-					'artistsId' => $playlist[$i]['artists'][0]['id'],
-					'artistsName' => $playlist[$i]['artists'][0]['name'],
-					'albumName' => $playlist[$i]['album']['name'],
-					'albumId' => $playlist[$i]['album']['id'],
-					'mp3Url' => self::get_hd_mp3_url(number_format($playlist[$i]['hMusic']['dfsId'], 0, '', '')),
-				);
-				array_push($result['info'], $arrayName);
+			for ($i = 0; $i < count($songsList); $i++) {
+				$song = self::get_song_by_id($songsList[$i]['id']);
+				if ($song['status'] === 'success') {
+					array_push($result['info'], $song['info']);
+				}
 			}
 		} else {
 			$result['status'] = 'false';
@@ -182,8 +176,8 @@ class Api {
 					$artist = array(
 						'artistId' => $artistsList[$i]['id'],
 						'artistName' => $artistsList[$i]['name'],
+						'artistImgUrl' => $artistsList[$i]['picUrl'],
 					);
-					// $result['info'] = $artist;
 					array_push($result['info'], $artist);
 				}
 			}
@@ -220,6 +214,7 @@ class Api {
 					$album = array(
 						'albumId' => $albumsList[$i]['id'],
 						'albumName' => $albumsList[$i]['name'],
+						'albumImgUrl' => $albumsList[$i]['picUrl'],
 					);
 					array_push($result['info'], $album);
 				}
@@ -255,17 +250,10 @@ class Api {
 				$result['info'] = array();
 				// 遍历歌曲
 				for ($i = 0; $i < count($songsList); $i++) {
-					$artistNames = array();
-					// 遍历歌手
-					foreach ($songsList[$i]['artists'] as $artist) {
-						array_push($artistNames, $artist['name']);
+					$song = self::get_song_by_id($songsList[$i]['id']);
+					if ($song['status'] === 'success') {
+						array_push($result['info'], $song['info']);
 					}
-					$song = array(
-						'songId' => $songsList[$i]['id'],
-						'songName' => $songsList[$i]['name'],
-						'artistNames' => $artistNames,
-					);
-					array_push($result['info'], $song);
 				}
 			}
 		} else {
@@ -279,7 +267,7 @@ class Api {
 	 * @param  Int $artistId 歌手ID
 	 * @return Json         专辑信息
 	 */
-	public function get_artist_albums($artistId) {
+	public function get_artist_albums_by_id($artistId) {
 		$result = null;
 		$url = "http://music.163.com/api/artist/albums/$artistId?offset=0&limit=50";
 		$jsonArr = self::request($url);
@@ -290,7 +278,9 @@ class Api {
 			for ($i = 0; $i < count($albumsList); $i++) {
 				$album = array(
 					'albumId' => $albumsList[$i]['id'],
-					'albumName' => $albumsList[$i]['name']);
+					'albumName' => $albumsList[$i]['name'],
+					'imgUrl' => $albumsList[$i]['picUrl'],
+				);
 				array_push($result['info'], $album);
 			}
 		} else {
@@ -313,19 +303,52 @@ class Api {
 			$songsList = $jsonArr['album']['songs'];
 			$result['info'] = array();
 			for ($i = 0; $i < count($songsList); $i++) {
-				$song = array(
-					'songId' => $songsList[$i]['id'],
-					'songName' => $songsList[$i]['name'],
-					'albumName' => $songsList[$i]['album']['name'],
-					'albumName' => $songsList[$i]['album']['id'],
-					'artistsId' => $songsList[$i]['artists'][0]['id'],
-					'artistsName' => $songsList[$i]['artists'][0]['name'],
-					'mp3Url' => self::get_hd_mp3_url(number_format($songsList[$i]['hMusic']['dfsId'], 0, '', '')));
-				array_push($result['info'], $song);
+				$song = self::get_song_by_id($songsList[$i]['id']);
+				if ($song['status'] === 'success') {
+					array_push($result['info'], $song['info']);
+				}
 			}
 		} else {
 			$result['status'] = 'false';
 		}
 		return json_encode($result, JSON_UNESCAPED_UNICODE);
+	}
+
+	/**
+	 * 根据歌曲ID获得详细信息
+	 * @param  Int $songId 歌曲ID
+	 * @return Array     信息数组
+	 */
+	public function get_song_by_id($songId) {
+		$result = null;
+		$url = "http://music.163.com/api/song/detail?id=$songId&ids=[$songId]";
+		$jsonArr = self::request($url);
+		if ($jsonArr['code'] === 200) {
+			$result['status'] = 'success';
+			$songsList = $jsonArr['songs'];
+			$result['info'] = array();
+			for ($i = 0; $i < count($songsList); $i++) {
+				$artistName = array();
+				$artistId = array();
+				// 遍历歌手
+				foreach ($songsList[$i]['artists'] as $artist) {
+					array_push($artistName, $artist['name']);
+					array_push($artistId, $artist['id']);
+				}
+				$song = array(
+					'songId' => $songsList[$i]['id'],
+					'songName' => $songsList[$i]['name'],
+					'albumName' => $songsList[$i]['album']['name'],
+					'albumId' => $songsList[$i]['album']['id'],
+					'artistId' => $artistId,
+					'artistName' => $artistName,
+					'mp3Url' => self::get_hd_mp3_url(number_format($songsList[$i]['hMusic']['dfsId'], 0, '', '')),
+					'imgUrl' => $songsList[$i]['album']['picUrl']);
+				array_push($result['info'], $song);
+			}
+		} else {
+			$result['status'] = 'false';
+		}
+		return $result;
 	}
 }
