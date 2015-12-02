@@ -77,7 +77,7 @@ class Api {
 	 * 登录操作
 	 * @param  String $username 用户名
 	 * @param  String $password   密码
-	 * @return Json       返回详细信息
+	 * @return string        返回详细信息
 	 */
 	public function login($username, $password) {
 		$url = 'http://music.163.com/api/login';
@@ -101,7 +101,7 @@ class Api {
 	/**
 	 * 根据userId获得歌单
 	 * @param  int $userId 用户ID
-	 * @return Json        歌单
+	 * @return string         歌单
 	 */
 	public function get_playlist_by_user($userId) {
 		$url = 'http://music.163.com/api/user/playlist/?offset=0&limit=100&uid=' . $userId;
@@ -126,7 +126,7 @@ class Api {
 	/**
 	 * 根据歌单ID获得详细信息
 	 * @param  int $playlistId 歌单id
-	 * @return Json     details_list
+	 * @return string      details_list
 	 */
 	public function get_playlist_details($playlistId) {
 		$url = 'http://music.163.com/api/playlist/detail?id=' . $playlistId;
@@ -152,7 +152,7 @@ class Api {
 	/**
 	 * 根据歌手名获得详细信息
 	 * @param  String $name 歌手名
-	 * @return Json       详细信息
+	 * @return string        详细信息
 	 */
 	public function search_artist_by_name($name) {
 		$url = 'http://music.163.com/api/search/get';
@@ -190,7 +190,7 @@ class Api {
 	/**
 	 * 根据专辑名获得详细信息
 	 * @param  String $name 专辑名
-	 * @return Json       详细信息
+	 * @return string        详细信息
 	 */
 	public function search_album_by_name($name) {
 		$url = 'http://music.163.com/api/search/get';
@@ -228,7 +228,7 @@ class Api {
 	/**
 	 * 根据歌曲名获得详细信息
 	 * @param  String $name 歌曲名
-	 * @return Json       详细信息
+	 * @return string        详细信息
 	 */
 	public function search_song_by_name($name) {
 		$url = 'http://music.163.com/api/search/get';
@@ -265,7 +265,7 @@ class Api {
 	/**
 	 * 根据歌手ID获得歌手专辑
 	 * @param  Int $artistId 歌手ID
-	 * @return Json         专辑信息
+	 * @return string          专辑信息
 	 */
 	public function get_artist_albums_by_id($artistId) {
 		$result = null;
@@ -292,7 +292,7 @@ class Api {
 	/**
 	 * 根据专辑ID取得专辑歌曲详细信息
 	 * @param  int $albumId 专辑ID
-	 * @return Json       详细信息
+	 * @return string        详细信息
 	 */
 	public function get_album_songs($albumId) {
 		$result = null;
