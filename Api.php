@@ -9,8 +9,8 @@ class Api {
 	/**
 	 * 封装curl操作
 	 * @param  String $url  操作的URL
-	 * @param  Array  $data POST参数,默认空
-	 * @return Array        获得的JSON数据
+	 * @param  string  $data POST参数,默认空
+	 * @return string        获得的JSON数据
 	 */
 	public function request($url, $data = null) {
 		$ch = curl_init();
@@ -31,7 +31,7 @@ class Api {
 	/**
 	 * 将String转换为byteArray
 	 * @param  String $string 传入字符串
-	 * @return Array          byteArray
+	 * @return string          byteArray
 	 */
 	public static function getBytes($string) {
 		$bytes = array();
@@ -43,7 +43,7 @@ class Api {
 
 	/**
 	 * 将byte数组转成ascii编码的字符串
-	 * @param  Array $bytes  byteArray
+	 * @param  string $bytes  byteArray
 	 * @return String        ascii字符串
 	 */
 	public static function toStr($bytes) {
@@ -317,7 +317,7 @@ class Api {
 	/**
 	 * 根据歌曲ID获得详细信息
 	 * @param  Int $songId 歌曲ID
-	 * @return Array     信息数组
+	 * @return string     信息数组
 	 */
 	public function get_song_by_id($songId) {
 		$result = null;
