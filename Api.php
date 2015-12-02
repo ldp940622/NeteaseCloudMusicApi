@@ -86,7 +86,7 @@ class Api {
 			'password' => md5($password),
 			'rememberLogin' => 'true',
 		));
-		$result = null;
+		$result = [];
 		$jsonArr = self::request($url, $data);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
@@ -105,7 +105,7 @@ class Api {
 	 */
 	public function get_playlist_by_user($userId) {
 		$url = 'http://music.163.com/api/user/playlist/?offset=0&limit=100&uid=' . $userId;
-		$result = null;
+		$result = [];
 		$jsonArr = self::request($url);
 		$playlist = $jsonArr['playlist'];
 		if ($playlist && $jsonArr['code'] === 200) {
@@ -130,7 +130,7 @@ class Api {
 	 */
 	public function get_playlist_details($playlistId) {
 		$url = 'http://music.163.com/api/playlist/detail?id=' . $playlistId;
-		$result = null;
+		$result = [];
 		$jsonArr = self::request($url);
 		$songsList = $jsonArr['result']['tracks'];
 		if ($jsonArr['code'] === 200) {
@@ -163,7 +163,7 @@ class Api {
 			'sub' => 'false',
 			'limit' => 10,
 		));
-		$result = null;
+		$result = [];
 		$jsonArr = self::request($url, $data);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
@@ -201,7 +201,7 @@ class Api {
 			'sub' => 'false',
 			'limit' => 20,
 		));
-		$result = null;
+		$result = [];
 		$jsonArr = self::request($url, $data);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
@@ -239,7 +239,7 @@ class Api {
 			'sub' => 'false',
 			'limit' => 100,
 		));
-		$result = null;
+		$result = [];
 		$jsonArr = self::request($url, $data);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
@@ -268,7 +268,7 @@ class Api {
 	 * @return string          专辑信息
 	 */
 	public function get_artist_albums_by_id($artistId) {
-		$result = null;
+		$result = [];
 		$url = "http://music.163.com/api/artist/albums/$artistId?offset=0&limit=50";
 		$jsonArr = self::request($url);
 		if ($jsonArr['code'] === 200) {
@@ -295,7 +295,7 @@ class Api {
 	 * @return string        详细信息
 	 */
 	public function get_album_songs($albumId) {
-		$result = null;
+		$result = [];
 		$url = "http://music.163.com/api/album/$albumId/";
 		$jsonArr = self::request($url);
 		if ($jsonArr['code'] === 200) {
@@ -320,7 +320,7 @@ class Api {
 	 * @return string     信息数组
 	 */
 	public function get_song_by_id($songId) {
-		$result = null;
+		$result = [];
 		$url = "http://music.163.com/api/song/detail?id=$songId&ids=[$songId]";
 		$jsonArr = self::request($url);
 		if ($jsonArr['code'] === 200) {
