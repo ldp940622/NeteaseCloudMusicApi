@@ -35,7 +35,8 @@ class Api {
 	 */
 	public static function getBytes($string) {
 		$bytes = array();
-		for ($i = 0; $i < strlen($string); $i++) {
+		$size = strlen($string);
+		for ($i = 0; $i < $size; $i++) {
 			$bytes[] = ord($string[$i]);
 		}
 		return $bytes;
@@ -48,7 +49,8 @@ class Api {
 	 */
 	public static function toStr($bytes) {
 		$str = '';
-		for ($i = 0; $i < count($bytes); $i++) {
+		$size = count($bytes);
+		for ($i = 0; $i < $size; $i++) {
 			$str .= chr($bytes[$i]);
 		}
 		// var_dump($str);
@@ -64,12 +66,12 @@ class Api {
 		$byte2[] = self::getBytes($id); //16
 		$magic = $byte1[0];
 		$song_id = $byte2[0];
-		for ($i = 0; $i < count($song_id); $i++) {
-			$song_id[$i] = $song_id[$i] ^ $magic[$i % count($magic)];
+		$size = count($song_id);
+		for ($i = 0; $i < $size; $i++) {
+			$song_id[$i] ^= $magic[$i % count($magic)];
 		}
 		$result = base64_encode(md5(self::toStr($song_id), true));
-		$result = str_replace('/', '_', $result);
-		$result = str_replace('+', '-', $result);
+		$result = str_replace(['/', '+'], ['_', '-'], $result);
 		return "http://m1.music.126.net/" . $result . '/' . number_format($id, 0, '', '') . ".mp3";
 	}
 
