@@ -111,7 +111,8 @@ class Api {
 		if ($playlist && $jsonArr['code'] === 200) {
 			$result['status'] = 'success';
 			$result['info'] = array();
-			for ($i = 0; $i < count($playlist); $i++) {
+			$size = count($playlist);
+			for ($i = 0; $i < $size; $i++) {
 				$arrayName = array(
 					'name' => $playlist[$i]['name'],
 					'playlistId' => $playlist[$i]['id'],
@@ -136,7 +137,8 @@ class Api {
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
 			$result['info'] = array();
-			for ($i = 0; $i < count($songsList); $i++) {
+			$size = count($songsList);
+			for ($i = 0; $i < $size ; $i++) {
 				$song = self::get_song_by_id($songsList[$i]['id']);
 				if ($song['status'] === 'success') {
 					array_push($result['info'], $song['info']);
@@ -172,7 +174,8 @@ class Api {
 			} else {
 				$artistsList = $jsonArr['result']['artists'];
 				$result['info'] = array();
-				for ($i = 0; $i < count($artistsList); $i++) {
+				$size = count($artistsList);
+				for ($i = 0; $i < $size; $i++) {
 					$artist = array(
 						'artistId' => $artistsList[$i]['id'],
 						'artistName' => $artistsList[$i]['name'],
@@ -210,7 +213,8 @@ class Api {
 			} else {
 				$albumsList = $jsonArr['result']['albums'];
 				$result['info'] = array();
-				for ($i = 0; $i < count($albumsList); $i++) {
+				$size = count($albumsList);
+				for ($i = 0; $i < $size ; $i++) {
 					$album = array(
 						'albumId' => $albumsList[$i]['id'],
 						'albumName' => $albumsList[$i]['name'],
@@ -249,7 +253,8 @@ class Api {
 				$songsList = $jsonArr['result']['songs'];
 				$result['info'] = array();
 				// 遍历歌曲
-				for ($i = 0; $i < count($songsList); $i++) {
+				$size = count($songsList);
+				for ($i = 0; $i < $size; $i++) {
 					$song = self::get_song_by_id($songsList[$i]['id']);
 					if ($song['status'] === 'success') {
 						array_push($result['info'], $song['info']);
@@ -275,7 +280,8 @@ class Api {
 			$result['status'] = 'success';
 			$albumsList = $jsonArr['hotAlbums'];
 			$result['info'] = array();
-			for ($i = 0; $i < count($albumsList); $i++) {
+			$size = count($albumsList);
+			for ($i = 0; $i < $size; $i++) {
 				$album = array(
 					'albumId' => $albumsList[$i]['id'],
 					'albumName' => $albumsList[$i]['name'],
@@ -302,7 +308,8 @@ class Api {
 			$result['status'] = 'success';
 			$songsList = $jsonArr['album']['songs'];
 			$result['info'] = array();
-			for ($i = 0; $i < count($songsList); $i++) {
+			$size = count($songsList);
+			for ($i = 0; $i < $size; $i++) {
 				$song = self::get_song_by_id($songsList[$i]['id']);
 				if ($song['status'] === 'success') {
 					array_push($result['info'], $song['info']);
@@ -327,7 +334,8 @@ class Api {
 			$result['status'] = 'success';
 			$songsList = $jsonArr['songs'];
 			$result['info'] = array();
-			for ($i = 0; $i < count($songsList); $i++) {
+			$size = count($songsList);
+			for ($i = 0; $i < $size; $i++) {
 				$artistName = array();
 				$artistId = array();
 				// 遍历歌手
