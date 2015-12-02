@@ -117,7 +117,7 @@ class Api {
 					'name' => $playlist[$i]['name'],
 					'playlistId' => $playlist[$i]['id'],
 				);
-				array_push($result['info'], $arrayName);
+				$result['info'][] = $arrayName;
 			}
 		} else {
 			$result['status'] = 'false';
@@ -141,7 +141,7 @@ class Api {
 			for ($i = 0; $i < $size ; $i++) {
 				$song = self::get_song_by_id($songsList[$i]['id']);
 				if ($song['status'] === 'success') {
-					array_push($result['info'], $song['info']);
+					$result['info'][] = $song['info'];
 				}
 			}
 		} else {
@@ -181,7 +181,7 @@ class Api {
 						'artistName' => $artistsList[$i]['name'],
 						'artistImgUrl' => $artistsList[$i]['picUrl'],
 					);
-					array_push($result['info'], $artist);
+					$result['info'][] = $artist;
 				}
 			}
 		} else {
@@ -220,7 +220,7 @@ class Api {
 						'albumName' => $albumsList[$i]['name'],
 						'albumImgUrl' => $albumsList[$i]['picUrl'],
 					);
-					array_push($result['info'], $album);
+					$result['info'][] = $album;
 				}
 			}
 		} else {
@@ -257,7 +257,7 @@ class Api {
 				for ($i = 0; $i < $size; $i++) {
 					$song = self::get_song_by_id($songsList[$i]['id']);
 					if ($song['status'] === 'success') {
-						array_push($result['info'], $song['info']);
+						$result['info'][] = $song['info'];
 					}
 				}
 			}
@@ -287,7 +287,7 @@ class Api {
 					'albumName' => $albumsList[$i]['name'],
 					'imgUrl' => $albumsList[$i]['picUrl'],
 				);
-				array_push($result['info'], $album);
+				$result['info'][] = $album;
 			}
 		} else {
 			$result['status'] = 'false';
@@ -312,7 +312,7 @@ class Api {
 			for ($i = 0; $i < $size; $i++) {
 				$song = self::get_song_by_id($songsList[$i]['id']);
 				if ($song['status'] === 'success') {
-					array_push($result['info'], $song['info']);
+					$result['info'][] = $song['info'];
 				}
 			}
 		} else {
@@ -340,8 +340,8 @@ class Api {
 				$artistId = array();
 				// 遍历歌手
 				foreach ($songsList[$i]['artists'] as $artist) {
-					array_push($artistName, $artist['name']);
-					array_push($artistId, $artist['id']);
+					$artistName[] = $artist['name'];
+					$artistId[] = $artist['id'];
 				}
 				$song = array(
 					'songId' => $songsList[$i]['id'],
@@ -352,7 +352,7 @@ class Api {
 					'artistName' => $artistName,
 					'mp3Url' => self::get_hd_mp3_url(number_format($songsList[$i]['hMusic']['dfsId'], 0, '', '')),
 					'imgUrl' => $songsList[$i]['album']['picUrl']);
-				array_push($result['info'], $song);
+				$result['info'][] = $song;
 			}
 		} else {
 			$result['status'] = 'false';
