@@ -5,8 +5,9 @@
  */
 class Api {
 	const refer = 'http://music.163.com';
+    const api_url = 'http://music.163.com/api/';
 
-	/**
+    /**
 	 * 封装curl操作
 	 * @param  String $url  操作的URL
 	 * @param  string  $data POST参数,默认空
@@ -82,7 +83,7 @@ class Api {
 	 * @return string        返回详细信息
 	 */
 	public function login($username, $password) {
-		$url = 'http://music.163.com/api/login';
+		$url = self::api_url . 'login';
 		$data = http_build_query(array(
 			'username' => $username,
 			'password' => md5($password),
@@ -106,7 +107,7 @@ class Api {
 	 * @return string         歌单
 	 */
 	public function get_playlist_by_user($userId) {
-		$url = 'http://music.163.com/api/user/playlist/?offset=0&limit=100&uid=' . $userId;
+		$url = self::api_url . 'user/playlist/?offset=0&limit=100&uid=' . $userId;
 		$result = [];
 		$jsonArr = self::request($url);
 		$playlist = $jsonArr['playlist'];
@@ -132,7 +133,7 @@ class Api {
 	 * @return string      details_list
 	 */
 	public function get_playlist_details($playlistId) {
-		$url = 'http://music.163.com/api/playlist/detail?id=' . $playlistId;
+		$url = self::api_url . 'playlist/detail?id=' . $playlistId;
 		$result = [];
 		$jsonArr = self::request($url);
 		$songsList = $jsonArr['result']['tracks'];
@@ -159,7 +160,7 @@ class Api {
 	 * @return string        详细信息
 	 */
 	public function search_artist_by_name($name) {
-		$url = 'http://music.163.com/api/search/get';
+		$url = self::api_url . 'search/get';
 		$data = http_build_query(array(
 			's' => $name,
 			'type' => 100,
@@ -198,7 +199,7 @@ class Api {
 	 * @return string        详细信息
 	 */
 	public function search_album_by_name($name) {
-		$url = 'http://music.163.com/api/search/get';
+		$url = self::api_url . 'search/get';
 		$data = http_build_query(array(
 			's' => $name,
 			'type' => 10,
@@ -237,7 +238,7 @@ class Api {
 	 * @return string        详细信息
 	 */
 	public function search_song_by_name($name) {
-		$url = 'http://music.163.com/api/search/get';
+		$url = self::api_url . 'search/get';
 		$data = http_build_query(array(
 			's' => $name,
 			'type' => 1,
@@ -276,7 +277,7 @@ class Api {
 	 */
 	public function get_artist_albums_by_id($artistId) {
 		$result = [];
-		$url = "http://music.163.com/api/artist/albums/$artistId?offset=0&limit=50";
+		$url = self::api_url . 'artist/albums/' . $artistId . '?offset=0&limit=50';
 		$jsonArr = self::request($url);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
@@ -304,7 +305,7 @@ class Api {
 	 */
 	public function get_album_songs($albumId) {
 		$result = [];
-		$url = "http://music.163.com/api/album/$albumId/";
+		$url = self::api_url . 'album/' . $albumId . '/';
 		$jsonArr = self::request($url);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
@@ -330,7 +331,7 @@ class Api {
 	 */
 	public function get_song_by_id($songId) {
 		$result = [];
-		$url = "http://music.163.com/api/song/detail?id=$songId&ids=[$songId]";
+		$url = self::api_url . 'song/detail?id=' . $songId . '&ids=[' . $songId . ']';
 		$jsonArr = self::request($url);
 		if ($jsonArr['code'] === 200) {
 			$result['status'] = 'success';
