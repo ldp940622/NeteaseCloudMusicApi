@@ -7,6 +7,8 @@ class Api {
 	const refer = 'http://music.163.com';
     const api_url = 'http://music.163.com/api/';
     const secret_bit_mask = '3go8&$8*3*3h0k(2)2';
+    const mp3_hd_url = "http://m1.music.126.net/";
+    const mp3_sd_url = "http://p1.music.126.net/";
 
     /**
 	 * 封装curl操作
@@ -64,18 +66,37 @@ class Api {
 	 * @return String  mp3Url
 	 */
 	public function get_hd_mp3_url($id) {
-		$byte1[] = $this->getBytes(self::secret_bit_mask); //18
-		$byte2[] = $this->getBytes($id); //16
-		$magic = $byte1[0];
-		$song_id = $byte2[0];
-		$size = count($song_id);
-		for ($i = 0; $i < $size; $i++) {
-			$song_id[$i] ^= $magic[$i % count($magic)];
-		}
-		$result = base64_encode(md5($this->toStr($song_id), true));
-		$result = str_replace(['/', '+'], ['_', '-'], $result);
-		return "http://m1.music.126.net/" . $result . '/' . number_format($id, 0, '', '') . ".mp3";
+        return $this->get_mp3_url($id,"hd");
 	}
+
+
+    public function get_sd_mp3_url($id) {
+        return $this->get_mp3_url($id,"sd");
+    }
+
+
+    public function get_mp3_url($id, $type) {
+        $byte1[] = $this->getBytes(self::secret_bit_mask); //18
+        $byte2[] = $this->getBytes($id); //16
+        $magic = $byte1[0];
+        $song_id = $byte2[0];
+        $size = count($song_id);
+        for ($i = 0; $i < $size; $i++) {
+            $song_id[$i] ^= $magic[$i % count($magic)];
+        }
+        $result = base64_encode(md5($this->toStr($song_id), true));
+        $result = str_replace(['/', '+'], ['_', '-'], $result);
+        $sufix = $result . '/' . number_format($id, 0, '', '') . ".mp3";
+        switch ($type) {
+            case "hd":$url = self::mp3_hd_url . $sufix;break;
+            case "sd":$url = self::mp3_sd_url . $sufix;break;
+            default: $url = NULL; break;
+        }
+        return $url;
+    }
+
+
+
 
 	/**
 	 * 登录操作
