@@ -6,6 +6,7 @@
 class Api {
 	const refer = 'http://music.163.com';
     const api_url = 'http://music.163.com/api/';
+    const secret_bit_mask = '3go8&$8*3*3h0k(2)2';
 
     /**
 	 * 封装curl操作
@@ -13,7 +14,7 @@ class Api {
 	 * @param  string  $data POST参数,默认空
 	 * @return string        获得的JSON数据
 	 */
-	public function request($url, $data = null) {
+	protected function request($url, $data = null) {
 		$ch = curl_init();
 		curl_setopt_array($ch, [
 			CURLOPT_URL => $url,
@@ -34,7 +35,7 @@ class Api {
 	 * @param  String $string 传入字符串
 	 * @return string          byteArray
 	 */
-	public static function getBytes($string) {
+	protected function getBytes($string) {
 		$bytes = array();
 		$size = strlen($string);
 		for ($i = 0; $i < $size; $i++) {
@@ -48,7 +49,7 @@ class Api {
 	 * @param  string $bytes  byteArray
 	 * @return String        ascii字符串
 	 */
-	public static function toStr($bytes) {
+    protected function toStr($bytes) {
 		$str = '';
 		$size = count($bytes);
 		for ($i = 0; $i < $size; $i++) {
@@ -63,15 +64,15 @@ class Api {
 	 * @return String  mp3Url
 	 */
 	public function get_hd_mp3_url($id) {
-		$byte1[] = self::getBytes('3go8&$8*3*3h0k(2)2'); //18
-		$byte2[] = self::getBytes($id); //16
+		$byte1[] = $this->getBytes(self::secret_bit_mask); //18
+		$byte2[] = $this->getBytes($id); //16
 		$magic = $byte1[0];
 		$song_id = $byte2[0];
 		$size = count($song_id);
 		for ($i = 0; $i < $size; $i++) {
 			$song_id[$i] ^= $magic[$i % count($magic)];
 		}
-		$result = base64_encode(md5(self::toStr($song_id), true));
+		$result = base64_encode(md5($this->toStr($song_id), true));
 		$result = str_replace(['/', '+'], ['_', '-'], $result);
 		return "http://m1.music.126.net/" . $result . '/' . number_format($id, 0, '', '') . ".mp3";
 	}
