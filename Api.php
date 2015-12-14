@@ -100,6 +100,7 @@ class Api {
 
 	/**
 	 * 登录操作
+     * @deprecated 登陆接口已作废
 	 * @param  String $username 用户名
 	 * @param  String $password   密码
 	 * @return string        返回详细信息
